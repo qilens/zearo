@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Zearo",
+  "name": "Zearo · 题镜",
   "version": "0.1.0",
   "description": "在 LeetCode 题目页生成结构化算法讲解。",
   "icons": {
