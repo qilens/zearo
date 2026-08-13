@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zearo</title>
+    <link rel="stylesheet" href="sidepanel.css">
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="brand" aria-label="Zearo">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M5 7h21L8 25h19" />
+          <circle cx="5" cy="7" r="2.5" />
+          <circle cx="27" cy="25" r="2.5" />
+        </svg>
+        <div>
+          <strong>ZEARO</strong>
+          <span>算法推演台</span>
+        </div>
+      </div>
+      <button id="settings-button" class="settings-button" type="button" aria-label="打开设置" title="设置">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm8 3.5-2.1-1.2.1-2.4-2.1-1.2-2 1.3-2.1-1.3-2 1.2.1 2.4L4 12l2.1 1.2-.1 2.4 2.1 1.2 2-1.3 2.1 1.3 2-1.2-.1-2.4L20 12Z" />
+        </svg>
+        <span>设置</span>
+      </button>
+    </header>
+
+    <main>
+      <section id="settings-view" class="view" aria-labelledby="settings-title">
+        <div class="section-heading">
+          <span class="eyebrow">偏好与连接</span>
+          <h1 id="settings-title">设置</h1>
+          <p>凭据只保存在当前浏览器中。保存时，Edge 会请求访问对应的 API 域名。</p>
+        </div>
+
+        <form id="settings-form" novalidate>
+          <fieldset class="settings-section">
+            <legend>模型连接</legend>
+
+            <label for="base-url">Base URL</label>
+            <input id="base-url" name="baseUrl" type="url" placeholder="https://api.openai.com" autocomplete="url" required>
+            <small>只填写协议、域名和端口。</small>
+
+            <label for="api-key">API Key</label>
+            <input id="api-key" name="apiKey" type="password" placeholder="sk-…" autocomplete="off" required>
+
+            <label for="model">模型名</label>
+            <input id="model" name="model" type="text" placeholder="your-model-name" autocomplete="off" required>
+          </fieldset>
+
+          <fieldset class="settings-section mode-settings">
+            <legend>代码输出</legend>
+            <label class="mode-option">
+              <input type="radio" name="codeMode" value="oj" checked>
+              <span>
+                <strong>OJ 快捷模式</strong>
+                <small>仅生成评测函数或 Solution 类，不包含 main。</small>
+              </span>
+            </label>
+            <label class="mode-option">
+              <input type="radio" name="codeMode" value="standalone">
+              <span>
+                <strong>标准独立编译模式</strong>
+                <small>生成完整源文件、必要导入和可运行 main 示例。</small>
+              </span>
+            </label>
+          </fieldset>
+
+          <fieldset class="settings-section cache-settings">
+            <legend>本地缓存</legend>
+            <div class="cache-row">
+              <span>已保存 <strong id="cache-count">0</strong> 份解答</span>
+              <button id="clear-cache" class="text-button" type="button">清除缓存</button>
+            </div>
+          </fieldset>
+
+          <div id="settings-error" class="notice notice-error" role="alert" hidden></div>
+          <div id="settings-status" class="notice notice-info" role="status" hidden></div>
+          <div class="form-actions">
+            <button id="cancel-settings" class="button button-secondary" type="button" hidden>取消</button>
+            <button class="button button-primary" type="submit">保存设置</button>
+          </div>
+        </form>
+      </section>
+
+      <section id="workspace-view" class="view" aria-labelledby="workspace-title" hidden>
+        <div class="question-bar">
+          <div class="question-copy">
+            <span class="eyebrow">当前题目</span>
+            <h1 id="workspace-title">等待读取题目</h1>
+          </div>
+          <label class="language-control" for="language">
+            <span>代码语言</span>
+            <select id="language">
+              <option value="auto">跟随编辑器</option>
+              <option value="Python 3">Python 3</option>
+              <option value="Java">Java</option>
+              <option value="C++">C++</option>
+              <option value="JavaScript">JavaScript</option>
+              <option value="TypeScript">TypeScript</option>
+              <option value="Go">Go</option>
+              <option value="Rust">Rust</option>
+            </select>
+          </label>
+        </div>
+
+        <div id="workspace-error" class="notice notice-error" role="alert" hidden></div>
+        <div id="cache-status" class="notice notice-info" role="status" hidden></div>
+
+        <section id="empty-state" class="empty-state" aria-label="开始解题">
+          <svg viewBox="0 0 260 90" aria-hidden="true">
+            <path class="empty-path" d="M14 16h96l-42 58h178" />
+            <circle cx="14" cy="16" r="5" />
+            <rect x="105" y="11" width="10" height="10" transform="rotate(45 110 16)" />
+            <circle cx="246" cy="74" r="5" />
+          </svg>
+          <h2>从题目到路径</h2>
+          <p>打开公开题的“题目描述”页，然后开始一次完整推演。</p>
+        </section>
+
+        <div id="analysis-status" class="analysis-status" role="status" hidden>
+          <span class="status-track" aria-hidden="true"><i></i><i></i><i></i></span>
+          <strong>正在分析题目</strong>
+          <span>模型正在组织思路、复杂度与代码。</span>
+        </div>
+
+        <article id="answer" class="answer-rail" hidden>
+          <section class="answer-section rail-start">
+            <span class="rail-node" aria-hidden="true"></span>
+            <span class="eyebrow">核心判断</span>
+            <h2>解题思路</h2>
+            <p id="answer-idea"></p>
+          </section>
+
+          <section class="answer-section rail-branch">
+            <span class="rail-node" aria-hidden="true"></span>
+            <span class="eyebrow">执行路径</span>
+            <h2>算法步骤</h2>
+            <ol id="answer-steps"></ol>
+          </section>
+
+          <section class="answer-section rail-branch">
+            <span class="rail-node" aria-hidden="true"></span>
+            <span class="eyebrow">资源边界</span>
+            <h2>复杂度</h2>
+            <dl class="complexity-grid">
+              <div><dt>TIME</dt><dd id="answer-time"></dd></div>
+              <div><dt>SPACE</dt><dd id="answer-space"></dd></div>
+            </dl>
+          </section>
+
+          <section class="answer-section rail-branch">
+            <span class="rail-node" aria-hidden="true"></span>
+            <div class="section-title-row">
+              <div>
+                <span class="eyebrow">可执行结果</span>
+                <h2>代码</h2>
+              </div>
+              <button id="copy-code" class="text-button" type="button">复制代码</button>
+            </div>
+            <pre><code id="answer-code"></code></pre>
+          </section>
+
+          <section id="pitfalls-section" class="answer-section rail-end">
+            <span class="rail-node" aria-hidden="true"></span>
+            <span class="eyebrow">终点检查</span>
+            <h2>易错点</h2>
+            <ul id="answer-pitfalls"></ul>
+          </section>
+
+          <section id="follow-up-result" class="answer-section rail-end" hidden>
+            <span class="rail-node" aria-hidden="true"></span>
+            <span class="eyebrow">路径分支</span>
+            <h2>补充推演</h2>
+            <p id="follow-up-answer" class="follow-up-answer"></p>
+          </section>
+        </article>
+
+        <form id="follow-up-form" class="follow-up-composer" hidden>
+          <label for="follow-up-question">追问当前路径</label>
+          <textarea id="follow-up-question" rows="3" placeholder="输入需要进一步解释的内容……" required></textarea>
+          <div class="form-actions">
+            <button id="cancel-follow-up" class="button button-secondary" type="button">取消</button>
+            <button id="send-follow-up" class="button button-primary" type="submit">发送追问</button>
+          </div>
+        </form>
+
+        <div class="workspace-actions">
+          <button id="follow-up-button" class="button button-secondary" type="button" hidden>追问</button>
+          <button id="start-button" class="button button-primary" type="button">开始解题</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="core.js"></script>
+    <script src="sidepanel.js"></script>
+  </body>
+</html>
