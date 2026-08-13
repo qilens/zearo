@@ -9,14 +9,14 @@
 在 PowerShell 中运行：
 
 ```powershell
-$installDir="$env:LOCALAPPDATA\Zearo\v0.1.0"; $zipFile="$env:TEMP\zearo-v0.1.0.zip"; New-Item -ItemType Directory -Force -Path $installDir | Out-Null; Invoke-WebRequest "https://github.com/qilens/zearo/releases/download/v0.1.0/zearo-v0.1.0.zip" -OutFile $zipFile; Expand-Archive -Path $zipFile -DestinationPath $installDir -Force; Start-Process explorer.exe $installDir; Start-Process msedge.exe "edge://extensions/"
+$installDir="$env:LOCALAPPDATA\Zearo\v0.1.1"; $zipFile="$env:TEMP\zearo-v0.1.1.zip"; New-Item -ItemType Directory -Force -Path $installDir | Out-Null; Invoke-WebRequest "https://github.com/qilens/zearo/releases/download/v0.1.1/zearo-v0.1.1.zip" -OutFile $zipFile; Expand-Archive -Path $zipFile -DestinationPath $installDir -Force; Start-Process explorer.exe $installDir; Start-Process msedge.exe "edge://extensions/"
 ```
 
 命令会下载并解压最新版安装包，同时打开扩展目录和 Edge 扩展管理页。随后：
 
 1. 开启“开发人员模式”。
 2. 点击“加载解压缩的扩展”。
-3. 选择刚刚打开的 `v0.1.0` 文件夹。
+3. 选择刚刚打开的 `v0.1.1` 文件夹。
 
 > Edge 不允许脚本静默安装未上架商店的扩展，因此最后三步需要手动完成。
 
@@ -30,7 +30,7 @@ git clone https://github.com/qilens/zearo.git
 
 ### 下载 Release
 
-也可以直接下载 [`zearo-v0.1.0.zip`](https://github.com/qilens/zearo/releases/download/v0.1.0/zearo-v0.1.0.zip)，解压后按上述方式加载。
+也可以直接下载 [`zearo-v0.1.1.zip`](https://github.com/qilens/zearo/releases/download/v0.1.1/zearo-v0.1.1.zip)，解压后按上述方式加载。
 
 ## 使用
 
