@@ -63,6 +63,31 @@ Edge 不允许普通脚本静默安装未上架商店的扩展，因此 README �
 8. 创建 `v0.1.0` Release，上传安装包。
 9. 在 GitHub 页面确认新账号地址、Release、附件和 README 均可访问。
 
+## 后续版本打包规则
+
+新增固定的 `scripts/package.ps1` 打包入口。脚本从 `manifest.json` 读取版本号，并采用运行文件白名单生成 `dist/zearo-v<version>.zip`。
+
+允许进入安装包的内容只有：
+
+- `manifest.json`
+- `service-worker.js`
+- `core.js`
+- `content.js`
+- `sidepanel.html`
+- `sidepanel.css`
+- `sidepanel.js`
+- `assets/`
+- `_locales/`
+
+脚本不得从项目根目录整体打包，也不得使用仅依赖排除名单的方式。`dist/`、`docs/`、`tests/`、`.git/`、README 和脚本自身不会进入安装包；未来新增的目录默认也不会进入安装包。
+
+生成后自动检查：
+
+1. ZIP 根目录包含 `manifest.json`。
+2. ZIP 中的版本号与文件名一致。
+3. `_locales/` 与运行资源存在。
+4. 不存在 `dist/`、`docs/`、`tests/`、`.git/` 等禁入路径。
+
 ## 非目标
 
 - 不自动修改 Edge 企业策略。
