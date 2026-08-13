@@ -50,10 +50,4 @@ Base URL 只填写协议、域名和端口，例如 `https://api.openai.com` 或
 - 支持 LeetCode 中英文站的公开题页面。
 - 扩展更新或标签页恢复后可自动补注入内容脚本。
 
-## 打包
 
-生成仅含扩展运行文件的安装包：
-
-```powershell
-.\scripts\package.ps1
-```
