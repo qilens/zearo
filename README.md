@@ -38,7 +38,7 @@ git clone https://github.com/qilens/zearo.git
 2. 点击 Zearo · 题镜图标打开侧边栏。
 3. 填写 API Base URL、API Key 和模型后开始解题。
 
-Base URL 只填写协议、域名和端口，例如 `https://api.openai.com` 或 `http://localhost:1234`。Zearo 会请求 `POST <Base URL>/v1/chat/completions`。
+Base URL 只填写协议、域名和端口，例如 `https://api.openai.com`。Zearo 会请求 `POST <Base URL>/v1/chat/completions`。
 
 ## 功能
 
